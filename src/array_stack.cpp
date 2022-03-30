@@ -1,59 +1,95 @@
 #include "assignment/array_stack.hpp"
 
+#include <iostream>
 #include <algorithm>  // copy, fill
 #include <stdexcept>  // invalid_argument (НЕЛЬЗЯ ИСПОЛЬЗОВАТЬ)
 
 namespace assignment {
 
   ArrayStack::ArrayStack(int capacity) {
-
     // выбрасываем ошибку, если указана неположительная емкость стека
     if (capacity <= 0) {
       throw std::invalid_argument("capacity is not positive");
     }
+    capacity_ = capacity;
+   data_ = new int[capacity];
+  for (int i = 0; i<capacity; i++){
+    data_[i] = 0;
+    }
 
-    // Write your code here ...
   }
 
   ArrayStack::~ArrayStack() {
-    // Write your code here ...
+    size_ = 0;
+    capacity_ = 0;
+    delete[] data_;
+    data_ = nullptr;
   }
 
   void ArrayStack::Push(int value) {
-    // Write your code here ...
+    if (size_ == capacity_){
+      Resize(capacity_+kCapacityGrowthCoefficient);
+    }
+    data_[size_] = value;
+    size_ ++;
   }
 
   bool ArrayStack::Pop() {
-    // Write your code here ...
+    if (size_>0){
+      data_[size_-1] = 0;
+      size_ = size_ - 1;
+      return true;
+    }
     return false;
   }
 
   void ArrayStack::Clear() {
-    // Write your code here ...
+    size_ = 0;
   }
 
   std::optional<int> ArrayStack::Peek() const {
-    // Write your code here ...
+    if (size_>0){
+      return data_[size_-1];
+    }
     return std::nullopt;
   }
 
   bool ArrayStack::IsEmpty() const {
-    // Write your code here ...
+    if (size_==0){
+      return true;
+    }
     return false;
   }
 
   int ArrayStack::size() const {
-    // Write your code here ...
+    return size_;
     return 0;
   }
 
   int ArrayStack::capacity() const {
-    // Write your code here ...
+    return capacity_;
     return 0;
   }
 
   bool ArrayStack::Resize(int new_capacity) {
-    // Write your code here ...
+    if(new_capacity>capacity_ && new_capacity >0){
+      int* data11 = new int[new_capacity];
+      for (int i = 0; i < size_; i++){
+        data11[i] = data_[i];
+      }
+
+      for (int i = size_; i < new_capacity; i++){
+        data11[i] = 0;
+      }
+      data_ = new int[new_capacity];
+      for (int i=0; i<new_capacity;i++){
+        data_[i]=data11[i];
+      }
+      delete [] data11;
+      capacity_=new_capacity;
+      data11 = nullptr;
+      return true;
+    }
     return false;
   }
 
